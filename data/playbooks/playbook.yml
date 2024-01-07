@@ -1,0 +1,39 @@
+---
+- name: Install base software
+  hosts: all
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: update hosts
+      lineinfile:
+        path: "/etc/hosts"
+        regexp: ".*\t{{ hostvars[item]['ansible_hostname']}}\t{{ hostvars[item]['ansible_hostname']}}"
+        line: "{{ hostvars[item]['ansible_env'].SSH_CONNECTION.split(' ')[2] }}\t{{ hostvars[item]['ansible_hostname']}}\t{{ hostvars[item]['ansible_hostname']}}"
+        state: present
+        backup: yes
+      with_items: "{{groups['all']}}"
+    - name: apt update
+      become: true
+      apt:
+        upgrade: 'yes'
+        update_cache: yes
+
+- name: agent installation
+  hosts: agents
+  become: yes
+  tasks:
+    - name: install jdk
+      apt:
+        name: openjdk-17-jre-headless
+        state: latest
+        install_recommends: no
+
+- name: master configuration
+  hosts: master
+  tasks:
+    - name: print Administrator password
+      command: cat /vagrant_data/jenkins_home/secrets/initialAdminPassword
+      register: command_output
+    - name:
+      debug:
+        msg: "{{command_output.stdout}}"
