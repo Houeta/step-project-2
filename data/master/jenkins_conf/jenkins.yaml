@@ -1,2 +1,58 @@
+# Credentials for J. Credential plugin is required
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+        - basicSSHUserPrivateKey:
+          scope: SYSTEM
+          id: ssh_vagrant_worker_without_passphrase
+          username: vagrant-worker
+          privateKeySource:
+            directEntry:
+              privateKey: "${readFile:${SSH_PRIVATE_FILE_PATH}}"
+
 jenkins:
-  systemMessage: 'Hello world'
+  # Add config for authentication
+  securityRealm:
+    local:
+      allowSignup: false
+      users:
+        - id: ${ADMIN_USER}
+          password: ${ADMIN_PW}
+
+  # Grant permissions
+  authorizationStrategy:
+    globalMatrix:
+      grantedPermissions:
+        - "Overall/Read:anonymous"
+        - "Overall/Administer:authenticated"
+   
+  # Fix security problems in Jenkins
+  crumIssuer:
+    standard:
+      excludeClientIPFromCrumb: false
+  
+  remotingSecurity:
+    enabled: true
+
+# Test job
+jobs:
+  - file: /var/jenkins_conf/jobs/${JOB_FILE}
+  - script: >
+      multibranchPipelineJob(${JOB_NAME}) {
+          branchSources {
+              git {
+                  id = ${JOB_NAME}
+                  remote(${GIT_HTTPS})
+              }
+          }
+      }
+
+security:
+  remotingCLI:
+    enabled: true       
+
+unclassified:
+  location:
+    adminAddress: ${ADMIN_EMAIL}
+    url: http://192.168.56.10:8080/
