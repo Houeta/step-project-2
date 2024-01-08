@@ -12,6 +12,13 @@ credentials:
               privateKey: "${readFile:${SSH_PRIVATE_FILE_PATH}}"
 
 jenkins:
+  # Grant permissions
+  authorizationStrategy:
+    globalMatrix:
+      grantedPermissions:
+        - "Overall/Read:anonymous"
+        - "Overall/Administer:authenticated"
+
   # Add config for authentication
   securityRealm:
     local:
@@ -20,12 +27,21 @@ jenkins:
         - id: ${ADMIN_USER}
           password: ${ADMIN_PW}
 
-  # Grant permissions
-  authorizationStrategy:
-    globalMatrix:
-      grantedPermissions:
-        - "Overall/Read:anonymous"
-        - "Overall/Administer:authenticated"
+  nodes:
+    - permanent:
+        name: 'vagrant-worker'
+        labelString: 'linux docker'
+        mode: NORMAL
+        remoteFS: '/home/vagrant'
+        launcher:
+          SSHLauncher:
+            host: "192.168.56.11"
+            port: 22
+            credentialsId: ssh_vagrant_worker_without_passphrase
+            sshHostKeyVerififcationStrategy:
+              manuallyTrustedKeyVerificationStrategy:
+                requireInititalManualTrust: false
+
    
   # Fix security problems in Jenkins
   crumIssuer:
