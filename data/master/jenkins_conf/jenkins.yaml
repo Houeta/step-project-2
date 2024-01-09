@@ -14,6 +14,11 @@ credentials:
           id: gh-token
           scope: GLOBAL
           secret: ${GITHUB_TOKEN}
+      - usernamePassword:
+          id: docker-creds
+          scope: GLOBAL
+          username: ${DOCKER_USR}
+          password: ${DOCKER_PSW}
 
 jenkins:
   numExecutors: 0
@@ -47,8 +52,6 @@ jenkins:
             port: 22
             credentialsId: ssh_vagrant_worker_without_passphrase
             sshHostKeyVerificationStrategy: "nonVerifyingKeyVerificationStrategy"
-              # manuallyTrustedKeyVerificationStrategy:
-              #   requireInitialManualTrust: false
    
   # Fix security problems in Jenkins
   crumbIssuer:
@@ -60,7 +63,7 @@ jenkins:
 
 # Test job
 jobs:
-  - file: /var/jenkins_conf/jobs/test.groovy    
+  - file: /var/jenkins_conf/jobs/seedJob.groovy  
 
 unclassified:
   location:
