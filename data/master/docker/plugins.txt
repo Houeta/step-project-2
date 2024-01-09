@@ -3,6 +3,7 @@ cloudbees-folder:latest
 configuration-as-code:latest
 credentials:latest
 ionicons-api:latest
+job-dsl:latest
 scm-api:latest
 script-security:latest
 workflow-api:latest

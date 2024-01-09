@@ -2,27 +2,35 @@
 credentials:
   system:
     domainCredentials:
-      - credentials:
-        - basicSSHUserPrivateKey:
+    - credentials:
+      - basicSSHUserPrivateKey:
           scope: SYSTEM
           id: ssh_vagrant_worker_without_passphrase
-          username: vagrant-worker
+          username: vagrant
           privateKeySource:
             directEntry:
               privateKey: "${readFile:${SSH_PRIVATE_FILE_PATH}}"
+      - string:
+          id: gh-token
+          scope: GLOBAL
+          secret: ${GITHUB_TOKEN}
 
 jenkins:
+  numExecutors: 0
+  mode: NORMAL
+  scmCheckoutRetryCount: 3
+  labelString: 'master-label'
   # Grant permissions
   authorizationStrategy:
     globalMatrix:
-      grantedPermissions:
-        - "Overall/Read:anonymous"
-        - "Overall/Administer:authenticated"
+      permissions:
+        - "USER:Overall/Read:anonymous"
+        - "GROUP:Overall/Administer:authenticated"
 
   # Add config for authentication
   securityRealm:
     local:
-      allowSignup: false
+      allowsSignup: false
       users:
         - id: ${ADMIN_USER}
           password: ${ADMIN_PW}
@@ -34,17 +42,16 @@ jenkins:
         mode: NORMAL
         remoteFS: '/home/vagrant'
         launcher:
-          SSHLauncher:
+          ssh:
             host: "192.168.56.11"
             port: 22
             credentialsId: ssh_vagrant_worker_without_passphrase
-            sshHostKeyVerififcationStrategy:
-              manuallyTrustedKeyVerificationStrategy:
-                requireInititalManualTrust: false
-
+            sshHostKeyVerificationStrategy: "nonVerifyingKeyVerificationStrategy"
+              # manuallyTrustedKeyVerificationStrategy:
+              #   requireInitialManualTrust: false
    
   # Fix security problems in Jenkins
-  crumIssuer:
+  crumbIssuer:
     standard:
       excludeClientIPFromCrumb: false
   
@@ -53,22 +60,15 @@ jenkins:
 
 # Test job
 jobs:
-  - file: /var/jenkins_conf/jobs/${JOB_FILE}
-  - script: >
-      multibranchPipelineJob(${JOB_NAME}) {
-          branchSources {
-              git {
-                  id = ${JOB_NAME}
-                  remote(${GIT_HTTPS})
-              }
-          }
-      }
-
-security:
-  remotingCLI:
-    enabled: true       
+  - file: /var/jenkins_conf/jobs/test.groovy    
 
 unclassified:
   location:
     adminAddress: ${ADMIN_EMAIL}
     url: http://192.168.56.10:8080/
+  
+  gitHubPluginConfig:
+    configs:
+    - credentialsId: gh-token
+      name: 'step-project-2'
+      manageHooks: true

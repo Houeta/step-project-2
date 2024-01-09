@@ -12,21 +12,58 @@
         state: present
         backup: yes
       with_items: "{{groups['all']}}"
+
     - name: apt update
       become: true
       apt:
         upgrade: 'yes'
         update_cache: yes
 
-- name: agent installation
+- name: agent installation (ubuntu)
   hosts: agents
   become: yes
   tasks:
+    - name: install aptitude
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+
     - name: install jdk
       apt:
         name: openjdk-17-jre-headless
         state: latest
         install_recommends: no
+
+    - name: install required packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - gnupg
+
+    - name: add docker gpg apt key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+    
+    - name: add docker repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu jammy stable
+        state: present
+
+    - name: install docker and etc
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      loop:
+        - docker-ce
+        - docker-ce-cli
+        - docker-buildx-plugin
+        
 
 - name: master configuration
   hosts: master
@@ -34,6 +71,7 @@
     - name: print Administrator password
       command: ls /vagrant_data/jenkins_home/secrets
       register: command_output
+
     - name:
       debug:
         msg: "{{command_output.stdout}}"

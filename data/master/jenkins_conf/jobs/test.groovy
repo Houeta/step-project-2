@@ -1,8 +1,20 @@
-pipeline {
-    agent {
-        any
-    }
-    stage('test') {
-        echo 'Hello world'
-    }
+pipelineJob('name') {
+  definition {
+      cps {
+        script('''
+            pipeline {
+                agent {
+                    any
+                }
+                stages {
+                    stage("name") {
+                        steps {
+                            sh 'do something'
+                        }
+                    }
+                 }
+            }
+        ''')
+        }
+  }
 }
