@@ -1,10 +1,10 @@
-pipelineJob('my-js-pipeline') {
+pipelineJob('my-js-pipeline-4') {
   definition {
     cpsScm {
         scm {
             git {
                 remote {
-                    url('${GITHUB_URL}.git')
+                    url("${GITHUB_URL}.git")
                 }
                 branch('*/main')
             }
