@@ -22,7 +22,7 @@ pipeline {
         stage('Build image') {
             steps {
                 echo "Build image with tag v${major_v}.${env.BUILD_NUMBER}"
-                sh "docker build -t ${DOCKER_IMAGE}"
+                sh "docker build -t ${DOCKER_IMAGE} ."
             }
         }
 
