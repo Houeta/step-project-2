@@ -13,11 +13,11 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: github_url
-            }
-        }
+        // stage('Checkout') {
+            // steps {
+                // git branch: 'main', url: github_url
+            // }
+        // }
 
         stage('Build image') {
             steps {
