@@ -10,11 +10,8 @@ pipelineJob('my-js-pipeline-from-csm') {
                 remote { url(repo) }
                 branch('main')
                 scriptPath('Jenkinsfile')
-                // extensions { }
             }
         }
-        // scriptPath('Jenkinsfile')
-        // lightweight()
         }
   }
   triggers {
