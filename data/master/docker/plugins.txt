@@ -24,6 +24,7 @@ jackson2-api:latest
 jdk-tool:latest
 jquery3-api:latest
 jsch:latest
+job-dsl:latest
 junit:latest
 ldap:latest
 lockable-resources:latest
