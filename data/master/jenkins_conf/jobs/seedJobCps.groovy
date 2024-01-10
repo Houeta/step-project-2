@@ -3,7 +3,7 @@
 pipelineJob('js-pipeline-cps') {
     definition {
         cps {
-            script(readFileFromWorkspace('my-pipeline.groovy'))
+            script(readFileFromWorkspace("${Jenkins.instance.getJob('js-pipeline-cps').workspace}/my-pipeline.groovy"))
 
         }
     }
