@@ -63,7 +63,8 @@ jenkins:
 
 # Test job
 jobs:
-  - file: /var/jenkins_conf/jobs/seedJob.groovy  
+  - file: /var/jenkins_conf/jobs/seedJob.groovy
+  - file: /var/jenkins_conf/jobs/seedJobCps.groovy
 
 unclassified:
   location:

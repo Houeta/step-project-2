@@ -1,12 +1,14 @@
-pipelineJob('my-js-pipeline-4') {
+pipelineJob('my-js-pipeline-from-csm') {
+
+  def repo = "https://github.com/Houeta/step-project-2.git"
+  description("Pipeline for $repo")
+
   definition {
     cpsScm {
         scm {
             git {
-                remote {
-                    url("${GITHUB_URL}.git")
-                }
-                branch('*/main')
+                remote { url(repo) }
+                branch('main')
             }
         }
         scriptPath('Jenkinsfile')
@@ -14,7 +16,6 @@ pipelineJob('my-js-pipeline-4') {
         }
   }
   triggers {
-    githubPush()
-    
+    scm('H/5 * * * *')
   }
 }

@@ -63,6 +63,26 @@
         - docker-ce
         - docker-ce-cli
         - docker-buildx-plugin
+    
+    - name: Add docker group
+      group:
+        name: docker
+        state: present
+    
+    - name: add user to docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: true
+    
+    - name: enable and start docker services
+      systemd:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+      loop:
+        - docker.service
+        - containerd.service
         
 
 - name: master configuration
