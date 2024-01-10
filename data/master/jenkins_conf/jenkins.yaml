@@ -10,10 +10,10 @@ credentials:
           privateKeySource:
             directEntry:
               privateKey: "${readFile:${SSH_PRIVATE_FILE_PATH}}"
-      - string:
-          id: gh-token
-          scope: GLOBAL
-          secret: ${GITHUB_TOKEN}
+      # - string:
+      #     id: gh-token
+      #     scope: GLOBAL
+      #     secret: ${GITHUB_TOKEN}
       - usernamePassword:
           id: docker-creds
           scope: GLOBAL
@@ -48,7 +48,7 @@ jenkins:
         remoteFS: '/home/vagrant'
         launcher:
           ssh:
-            host: "192.168.56.11"
+            host: "jenkins-worker"
             port: 22
             credentialsId: ssh_vagrant_worker_without_passphrase
             sshHostKeyVerificationStrategy: "nonVerifyingKeyVerificationStrategy"
@@ -68,10 +68,10 @@ jobs:
 unclassified:
   location:
     adminAddress: ${ADMIN_EMAIL}
-    url: http://192.168.56.10:8080/
+    url: http://jenkins-master:8080/
   
-  gitHubPluginConfig:
-    configs:
-    - credentialsId: gh-token
-      name: 'step-project-2'
-      manageHooks: true
+  # gitHubPluginConfig:
+  #   configs:
+  #   - credentialsId: gh-token
+  #     name: 'step-project-2'
+  #     manageHooks: true
