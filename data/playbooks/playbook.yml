@@ -85,13 +85,12 @@
         - containerd.service
         
 
-# - name: master configuration
-#   hosts: master
-#   tasks:
-#     - name: print Administrator password
-#       command: ls /vagrant_data/jenkins_home/secrets
-#       register: command_output
-
-#     - name:
-#       debug:
-#         msg: "{{command_output.stdout}}"
+- name: master configuration
+  hosts: master
+  tasks:
+    - name: add a settintg to gitconfig
+      community.general.git_config:
+        name: safe.dierctory
+        file: /vagrant_data/jenkins_home
+        scope: global
+        value: "*"
