@@ -1,6 +1,7 @@
 pipelineJob('my-js-pipeline-from-csm') {
 
-  def repo = "https://github.com/Houeta/step-project-2.git"
+  def repo = "${GITHUB_URL}"
+  disabled()
   description("Pipeline for $repo")
 
   definition {

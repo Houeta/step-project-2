@@ -1,5 +1,3 @@
-echo "${Jenkins.instance.getJob('js-pipeline-cps').workspace}/my-pipeline.groovy"
-
 pipelineJob('js-pipeline-cps') {
     definition {
         cps {
