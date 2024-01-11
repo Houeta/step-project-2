@@ -88,9 +88,13 @@
 - name: master configuration
   hosts: master
   tasks:
-    - name: add a settintg to gitconfig
-      community.general.git_config:
-        name: safe.dierctory
-        file: /vagrant_data/jenkins_home
-        scope: global
-        value: "*"
+    - name: add a settintg to gitconfig in container
+      community.docker.docker_container_exec:
+        container: jenkins-master
+        command: git config --global --add safe.directory *
+        chdir: /var/jenkins_home/jobs
+      register: result
+
+    - name: print stdout
+      ansible.builtin.debug:
+        var: result.stdout
