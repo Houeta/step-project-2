@@ -5,12 +5,11 @@ from re import match
 
 
 from dotenv import load_dotenv, set_key
-import validators
 from os.path import join, dirname
+import validators
 
 env_file = '.env.jenkins'
 dotenv_path = join(dirname(__file__), 'data', 'master', 'jenkins_conf', env_file)
-
 list_of_ENV = {
     'ADMIN_USER': ["Enter a username for Jenkins", "admin"],
     'ADMIN_PSW': ["Enter a password for Jenkins", "admin"],
@@ -19,8 +18,6 @@ list_of_ENV = {
     'DOCKER_USR': ["Enter your docker username"],
     'DOCKER_PSW': ["Enter your docker password"],
     }
-
-
 
 def wrap_input(env, env_value):
     try:
@@ -36,7 +33,7 @@ def wrap_input(env, env_value):
             wrap_input(env, env_value)
     elif '_URL' in env:
         user_value = input(output_string)
-        if not validators.url(user_value):
+        if user_value and not validators.url(user_value):
             wrap_input(env, env_value)
     else:
         user_value = input(output_string)
@@ -53,7 +50,6 @@ def set_default_value(env, env_value):
     except:
         default_value = ''
     set_variable_in_file(env, default_value)
-
 
 def set_variable_in_file(key, value, env_file=dotenv_path):
     environ[key] = value
