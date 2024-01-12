@@ -4,6 +4,7 @@ pipelineJob('js-pipeline-cps') {
 
     definition {
         cps {
+            sandbox()
             script('''
                 pipeline {
                     agent {
@@ -11,7 +12,7 @@ pipelineJob('js-pipeline-cps') {
                     }
 
                     environment {
-                        github_url = "${GITHUB_URL}"
+                        github_url = "https://github.com/Houeta/step-project-2"
                         major_v = 1
                         registry = 'pathetic/step-project'
 

@@ -53,7 +53,7 @@ def set_default_value(env, env_value):
 
 def set_variable_in_file(key, value, env_file=dotenv_path):
     environ[key] = value
-    set_key(env_file, key, environ[key])
+    set_key(env_file, key, environ[key], quote_mode="never")
 
 def validate_email_syntax(email):
     if not email:

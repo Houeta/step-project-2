@@ -34,7 +34,7 @@ jenkins:
       allowsSignup: false
       users:
         - id: ${ADMIN_USER}
-          password: ${ADMIN_PW}
+          password: ${ADMIN_PSW}
 
   nodes:
     - permanent:
@@ -56,6 +56,11 @@ jenkins:
   
   remotingSecurity:
     enabled: true
+  
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
+
 
 # Test job
 jobs:
