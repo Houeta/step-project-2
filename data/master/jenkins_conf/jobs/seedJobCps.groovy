@@ -1,4 +1,7 @@
 pipelineJob('js-pipeline-cps') {
+
+    description("Pipeline for ${GITHUB_URL}")
+
     definition {
         cps {
             script('''
@@ -8,7 +11,7 @@ pipelineJob('js-pipeline-cps') {
                     }
 
                     environment {
-                        github_url = 'https://github.com/Houeta/step-project-2'
+                        github_url = "${GITHUB_URL}"
                         major_v = 1
                         registry = 'pathetic/step-project'
 
